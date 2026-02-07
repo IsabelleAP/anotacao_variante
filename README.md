@@ -1,0 +1,19 @@
+# Pipeline de Alinhamento e Chamada de Variantes (NGS)
+
+Este projeto implementa um pipeline de alinhamento e chamada de variantes a partir de dados de sequenciamento NGS, utilizando um ambiente reprodutível baseado em Docker.
+
+O ambiente foi construído a partir de uma imagem Miniconda e configurado com ferramentas clássicas de bioinformática, incluindo Fastp (controle de qualidade de reads), BWA (alinhamento), Samtools (processamento de alinhamentos), Bcftools (chamada de variantes) e Ensembl VEP (anotação funcional de variantes), além de bibliotecas Python (NumPy, Pandas, BioPython) para análises posteriores. O uso do Docker garante consistência de versões e portabilidade do pipeline.
+
+Como referência genômica, foi utilizada a montagem humana GRCh38. Para tornar o fluxo mais leve e didático, apenas o cromossomo 20 foi extraído do genoma completo. Esse arquivo foi indexado tanto pelo Samtools quanto pelo BWA, preparando-o para as etapas de alinhamento e análise.
+
+Os dados da amostra foram obtidos de um experimento público de sequenciamento e processados inicialmente com Fastp para controle de qualidade e remoção de regiões de baixa qualidade. Para reduzir o tempo computacional, foi criado um subconjunto das reads. Em seguida, as leituras foram alinhadas ao genoma de referência com o BWA-MEM, gerando um arquivo BAM ordenado e indexado com Samtools.
+
+A identificação de variantes foi realizada com Bcftools, que avaliou as evidências de cada posição do genoma a partir do alinhamento e detectou diferenças em relação à referência. Foram reportadas apenas posições variantes, incluindo SNPs e pequenas inserções/deleções. O arquivo VCF resultante foi comprimido e indexado, ficando pronto para etapas posteriores de anotação funcional e análise biológica.
+
+Para garantir padronização na representação das variantes e compatibilidade com bancos de dados externos, o VCF passou por etapas adicionais de processamento. Utilizando o vt, variantes multialélicas foram decompostas em registros independentes e, em seguida, normalizadas em relação ao genoma de referência. Esse procedimento promove o alinhamento consistente de indels e remove redundâncias de representação. O arquivo final foi novamente comprimido e indexado, resultando no conjunto definitivo de variantes da amostra.
+
+Na etapa de anotação, foi incorporado o banco público ClinVar, que reúne informações sobre relevância clínica de variantes reportadas por laboratórios e instituições de pesquisa. O VCF do ClinVar correspondente à montagem GRCh38 foi baixado e filtrado para manter apenas registros do cromossomo 20. Assim como realizado para a amostra, as variantes foram decompostas, tiveram os nomes de cromossomos ajustados para compatibilidade com a referência utilizada no pipeline e foram normalizadas. O conjunto final foi comprimido e indexado, permitindo consultas rápidas por posição genômica.
+
+A partir desses arquivos compatíveis, foi realizado um cruzamento entre as variantes da amostra e o ClinVar com o bcftools annotate. Quando ocorre correspondência exata de posição e alelos, informações como significado clínico, nível de revisão e possíveis conflitos de interpretação são adicionadas ao VCF da amostra, enriquecendo a análise com conhecimento previamente estabelecido.
+
+Adicionalmente, foi aplicada a anotação funcional com o Ensembl Variant Effect Predictor (VEP) em modo offline, utilizando o FASTA do cromossomo 20 e o ClinVar como fonte customizada. O VEP permitiu estimar o impacto molecular das variantes, identificando genes e transcritos afetados e classificando consequências como alterações sinônimas, missense, entre outras. O resultado foi exportado em formato tabular (TSV), facilitando integrações futuras com ferramentas de análise de dados.

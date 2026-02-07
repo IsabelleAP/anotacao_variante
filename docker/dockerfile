@@ -1,0 +1,19 @@
+FROM --platform=linux/amd64 continuumio/miniconda3:24.3.0-0
+
+RUN conda config --add channels bioconda \
+    && conda config --add channels conda-forge \
+    && conda config --add channels defaults \
+    && conda install -y -c bioconda -c conda-forge -c defaults \
+    bcftools=1.20 \
+    samtools=1.20 \
+    ensembl-vep=115.2 \
+    vt=0.57721 \
+    fastp=0.23.2 \
+    multiqc=1.25.2 \
+    bwa=0.7.18 \
+    ncbi-datasets-cli=18.9.0 \
+    python=3.11 \
+    biopython=1.86 \
+    pandas=2.3.3 \
+    numpy=2.3.4 \
+    && conda clean -afy
