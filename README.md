@@ -33,8 +33,9 @@ Foram detectadas 3.133 variantes no cromossomo 20, das quais 47 apresentam regis
 De acordo com a classificação do VEP, todas as variantes foram categorizadas com impacto MODIFIER, consistente com a localização majoritária em regiões intergênicas ou sem efeito funcional previsto.
 Nenhuma variante foi classificada nas categorias HIGH ou MODERATE, indicando ausência de alterações com potencial efeito direto sobre produtos gênicos neste conjunto de dados.
 
-A comparação com o banco ClinVar mostrou que a maioria das variantes não possui registro prévio. Entre as variantes anotadas, predominaram classificações benignas ou provavelmente benignas, com poucos registros de significado clínico incerto:
--                                               3086
+A comparação com o banco ClinVar mostrou que a maioria das variantes não possui registro prévio. 
+Entre as variantes anotadas, predominaram classificações benignas ou provavelmente benignas, com poucos registros de significado clínico incerto:
+
 Benign                                            24
 Likely_benign                                     10
 Uncertain_significance                            10
