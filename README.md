@@ -60,6 +60,5 @@ graph TD
     F --> G(Normalização - vt)
     G --> H(Anotação clínica - ClinVar)
     H --> I(Anotação funcional - VEP)
-    I --> J[TSV para análises dos dados]
-    J --> J[Análise dos dados em Python]
+    I --> J[Análise dos dados em Python]
 ```
